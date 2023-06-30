@@ -1,11 +1,11 @@
 package ru.smartjava.service;
 
 import org.springframework.stereotype.Service;
+import ru.smartjava.exception.NotFoundException;
 import ru.smartjava.model.Post;
 import ru.smartjava.repository.PostRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PostService {
@@ -19,15 +19,17 @@ public class PostService {
         return repository.all();
     }
 
-    public Optional<Post> getById(long id) {
-        return repository.getById(id);
+    public Post getById(long id) {
+        return repository.getById(id).orElseThrow(NotFoundException::new);
     }
 
     public Post save(Post post) {
+        if (post.getId() > 0) repository.getById(post.getId()).orElseThrow(NotFoundException::new);
         return repository.save(post);
     }
 
     public void removeById(long id) {
+        repository.getById(id).orElseThrow(NotFoundException::new);
         repository.removeById(id);
     }
 }
