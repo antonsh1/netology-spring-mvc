@@ -8,11 +8,11 @@ import java.util.Optional;
 // Stub
 public interface PostRepository {
 
-    public List<Post> all();
+    List<Post> all();
 
-    public Optional<Post> getById(long id);
+    Optional<Post> getById(long id);
 
-    public Post save(Post post);
+    Optional<Post> save(Post post);
 
-    public void removeById(long id);
+    void removeById(long id);
 }

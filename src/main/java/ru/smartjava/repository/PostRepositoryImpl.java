@@ -23,15 +23,23 @@ public class PostRepositoryImpl implements PostRepository {
         return Optional.ofNullable(repo.get(id));
     }
 
-    public Post save(Post post) {
+    public Optional<Post> save(Post post) {
         if (post.getId() == 0) {
             post.setId(index.addAndGet(1));
+            post.setDeleted(false);
+            repo.put(post.getId(), post);
         }
-        repo.put(post.getId(), post);
-        return post;
+        if (repo.values().stream().filter(Post::isActive).map(Post::getId).toList().contains(post.getId())) {
+            repo.put(post.getId(), post);
+        } else {
+            post = null;
+        }
+        return Optional.ofNullable(post);
     }
 
     public void removeById(long id) {
-        repo.remove(id);
+        if (repo.values().stream().filter(Post::isActive).map(Post::getId).toList().contains(id)) {
+            repo.get(id).setDeleted(true);
+        }
     }
 }

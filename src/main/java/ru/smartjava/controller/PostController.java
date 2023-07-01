@@ -2,6 +2,7 @@ package ru.smartjava.controller;
 
 import org.springframework.web.bind.annotation.*;
 import ru.smartjava.model.Post;
+import ru.smartjava.model.PostDto;
 import ru.smartjava.service.PostService;
 
 import java.util.List;
@@ -16,18 +17,22 @@ public class PostController {
     }
 
     @GetMapping
-    public List<Post> all() {
+    public List<PostDto> all() {
         return service.all();
     }
 
     @GetMapping("/{id}")
-    public Post getById(@PathVariable long id) {
+    public PostDto getById(@PathVariable long id) {
         return service.getById(id);
     }
 
+    @GetMapping("/deleted")
+    public List<Post> getDeleted() {
+        return service.deleted();
+    }
     @PostMapping
-    public Post save(@RequestBody Post post) {
-        return service.save(post);
+    public PostDto save(@RequestBody PostDto postDto) {
+        return service.save(postDto);
     }
 
     @DeleteMapping("/{id}")
